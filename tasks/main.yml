@@ -1,1 +1,38 @@
 # Defaults tasks for role tinyproxy
+- name: Importing specific distro variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  tags:
+    - vars
+
+- name: Ensuring pkg is installed
+  yum:
+    name: "{{ tinyproxy_pkg_name }}"
+    state: latest
+
+- name: Allowing clients to reach us
+  include_role:
+    name: iptables
+    tasks_from: custom-policy-list
+  vars:
+    iptables_policy_name: tinyproxy
+    iptables_protocol: tcp
+    iptables_port: "{{ tinyproxy_port }}"
+    iptables_allowed_from: "{{ tinyproxy_clients_acl }}"
+
+- name: Configuring tinyproxy
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/tinyproxy/{{ item }}"
+  with_items:
+    - tinyproxy.conf
+    - filter
+  notify:
+    - restart_tinyproxy
+
+- name: Ensuring tinyproxy is started and enabled
+  service:
+    name: tinyproxy
+    state: started
+    enabled: True

@@ -1,1 +1,27 @@
 # Defaults variables for role tinyproxy
+
+# Which tcp/port we want to use/listen on
+tinyproxy_port: 8080
+
+# Some tinyproxy settings
+# Pretty straight forward so see upstream tinyproxy.conf default
+tinyproxy_maxclients: 100
+tinyproxy_minspareservers: 5
+tinyproxy_maxspareservers: 20
+tinyproxy_startservers: 10
+
+# Which clients subnets/IPs we'd like to allow in the ACL 
+tinyproxy_clients_acl:
+  - 127.0.0.1/32
+  - 172.22.0.0/23
+
+# By default we'll decide to block everything *but* domains in tinyproxy_domains_filter
+# if we set this to False, it means that domains_filter will be denied and the rest allow
+tinyproxy_deny_policy: True
+
+# Depending on previous boolean, we'll just only allow (default) or deny domains in this list
+# See example but it's using POSIX regex (see http://tinyproxy.github.io/)
+tinyproxy_domains_filter:
+  - ^centos\.org$
+  - ^mirror\.centos\.org$
+  

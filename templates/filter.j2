@@ -1,0 +1,6 @@
+# Managed by Ansible. Don't edit !
+# See `tinyproxy_domains_filter` ansible list and also regex compliance
+
+{% for domain in tinyproxy_domains_filter %}
+{{ domain }}
+{% endfor %}
