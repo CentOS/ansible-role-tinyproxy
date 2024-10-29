@@ -11,6 +11,14 @@
     name: "{{ tinyproxy_pkg_name }}"
     state: latest
 
+- name: Ensuring tinyproxy can log to file
+  file:
+    path: /var/log/tinyproxy
+    state: directory
+    owner: tinyproxy
+    group: tinyproxy
+    mode: '700'
+
 - name: Allowing clients to reach us
   include_role:
     name: iptables

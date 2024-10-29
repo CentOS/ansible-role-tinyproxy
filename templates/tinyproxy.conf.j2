@@ -124,8 +124,9 @@ LogLevel Connect
 # can be used for signalling purposes.
 # If not specified, no pidfile will be written.
 #
+{% if ansible_distribution_major_version|int < 9 %}
 PidFile "/run/tinyproxy/tinyproxy.pid"
-
+{% endif %}
 #
 # XTinyproxy: Tell Tinyproxy to include the X-Tinyproxy header, which
 # contains the client's IP address.
